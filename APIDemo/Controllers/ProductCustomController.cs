@@ -30,5 +30,44 @@ namespace APIDemo.Controllers
             return response;
 
         }
+
+
+
+        [HttpGet]
+        public  List<Product>GetProductsPrice(double price)
+        {
+            var response= _context.Products.Where(x=>x.Price> price).ToList();
+
+            return response;
+        }
+
+        [HttpGet]
+        public Product GetProductPrice(double price) 
+        {
+            var response = _context.Products
+                .Where(x => x.Price > price).FirstOrDefault();
+            return response;
+        }
+
+
+
+        [HttpPost]
+        public void Insert(List<ProductV1> request)
+        {
+            List<Product> products = new List<Product>();
+            
+            foreach (var item in request)
+            {
+                Product product = new Product
+                {
+                    Price = item.Price,
+                    Name = item.Name,
+                    Active = true
+                };
+                products.Add(product);
+            }
+            _context.Products.AddRange(products);
+            _context.SaveChanges();          
+        }   
     }
 }
